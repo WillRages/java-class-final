@@ -9,8 +9,8 @@ import java.util.List;
  * Wraps a CSV file with accessor methods.
  */
 public class Database {
-    public final ArrayList<String> headers;
-    public final HashMap<String, ArrayList<String>> rows = new HashMap<>();
+    private final ArrayList<String> headers;
+    private final HashMap<String, ArrayList<String>> rows = new HashMap<>();
     private final File file;
 
     private ArrayList<String> readList(BufferedReader reader) throws IOException {
@@ -59,8 +59,9 @@ public class Database {
     private static String joinRow(ArrayList<String> row) {
         StringBuilder builder = new StringBuilder(row.size());
 
-        for (var entry : row) {
-            builder.append(entry);
+        for (int i = 0; i < row.size(); ++i) {
+            builder.append(row.get(i));
+            if (i != row.size() - 1) builder.append(',');
         }
 
         return builder.toString();
