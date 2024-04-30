@@ -5,21 +5,29 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Row {
-    public final HashMap<String, String> data;
+    private final HashMap<String, String> data;
 
     public Row(HashMap<String, String> data) {
         this.data = data;
     }
 
     public String getString(String key) {
-        return null;
+        return data.get(key);
     }
 
     public Integer getInteger(String key) {
-        return null;
+        try {
+            return Integer.parseInt(data.get(key));
+        } catch (NumberFormatException ignored) {
+            return null;
+        }
     }
 
     public Double getDouble(String key) {
-        return null;
+        try {
+            return Double.parseDouble(data.get(key));
+        } catch (NumberFormatException ignored) {
+            return null;
+        }
     }
 }
