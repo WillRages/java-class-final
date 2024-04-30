@@ -1,9 +1,6 @@
 package database;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -14,13 +11,14 @@ import java.util.List;
 public class Database {
     public final ArrayList<String> headers;
     public final HashMap<String, ArrayList<String>> rows = new HashMap<>();
+    private final File file;
 
     private ArrayList<String> readList(BufferedReader reader) throws IOException {
         return new ArrayList<>(List.of(reader.readLine().split(",")));
     }
 
     public Database(String fileName) {
-        File file = new File(fileName);
+        this.file = new File(fileName);
         try (var reader = new BufferedReader(new FileReader(file))) {
             this.headers = readList(reader);
             while (reader.ready()) {
@@ -43,10 +41,38 @@ public class Database {
         return new Row(map);
     }
 
+    public void addRow(String... data) {
+        if (data.length != this.headers.size()) {
+            return;
+        }
+
+        this.rows.put(data[0], new ArrayList<>(List.of(data[0])));
+    }
+
     public void addColumn(String name, String defaultValue) {
         headers.add(name);
         for (var row : rows.values()) {
             row.add(defaultValue);
+        }
+    }
+
+    private static String joinRow(ArrayList<String> row) {
+        StringBuilder builder = new StringBuilder(row.size());
+
+        for (var entry : row) {
+            builder.append(entry);
+        }
+
+        return builder.toString();
+    }
+
+    public void writeToFile() {
+        try (var writer = new BufferedWriter(new FileWriter(file, false))) {
+            writer.write(joinRow(this.headers));
+            for (var row : this.rows.values()) {
+                writer.write(joinRow(row));
+            }
+        } catch (IOException ignored) {
         }
     }
 }
