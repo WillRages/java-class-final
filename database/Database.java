@@ -3,7 +3,7 @@ package database;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.List
 
 /**
  * Wraps a CSV file with accessor methods.
@@ -19,7 +19,7 @@ public class Database {
 
     public Database(String fileName) {
         this.file = new File(fileName);
-        try (var reader = new BufferedReader(new FileReader(file))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
             this.headers = readList(reader);
             while (reader.ready()) {
                 ArrayList<String> cols = readList(reader);
@@ -32,7 +32,7 @@ public class Database {
 
     public Row getRow(String primaryKey) {
         HashMap<String, String> map = new HashMap<>(this.headers.size());
-        final var row = rows.get(primaryKey);
+        final Row row = rows.get(primaryKey);
 
         for (int i = 0; i < this.headers.size(); i++) {
             map.put(headers.get(i), row.get(i));
@@ -51,7 +51,7 @@ public class Database {
 
     public void addColumn(String name, String defaultValue) {
         headers.add(name);
-        for (var row : rows.values()) {
+        for (Row row : rows.values()) {
             row.add(defaultValue);
         }
     }
@@ -68,9 +68,9 @@ public class Database {
     }
 
     public void writeToFile() {
-        try (var writer = new BufferedWriter(new FileWriter(file, false))) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, false))) {
             writer.write(joinRow(this.headers));
-            for (var row : this.rows.values()) {
+            for (Row row : this.rows.values()) {
                 writer.write(joinRow(row));
             }
         } catch (IOException ignored) {
