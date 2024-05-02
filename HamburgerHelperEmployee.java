@@ -8,10 +8,5 @@ public class HamburgerHelperEmployee {
     }
 
     public static void main(String[] args) {
-        addEmployee("John", "Worker", 30);
-        addEmployee("James", "Worker", 20);
-        addEmployee("Ames", "Worker", 25);
-
-        database.writeToFile();
     }
 }
