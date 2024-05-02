@@ -11,5 +11,7 @@ public class HamburgerHelperEmployee {
         addEmployee("John", "Worker", 30);
         addEmployee("James", "Worker", 20);
         addEmployee("Ames", "Worker", 25);
+
+        database.writeToFile();
     }
 }

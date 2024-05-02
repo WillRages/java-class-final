@@ -19,13 +19,23 @@ public class Database {
 
     public Database(String fileName) {
         this.file = new File(fileName);
+        int line = 0;
         try (var reader = new BufferedReader(new FileReader(file))) {
+            if (!reader.ready()) {
+                headers = new ArrayList<>();
+                return;
+            }
             this.headers = readList(reader);
             while (reader.ready()) {
+                ++line;
                 ArrayList<String> cols = readList(reader);
+                if (cols.size() != headers.size()) {
+                    throw new Exception(String.format("Wrong column size %d, expected %d", cols.size(), headers.size()));
+                }
                 this.rows.put(cols.getFirst(), cols);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
+            System.err.println(e + "\nAt line " + line);
             throw new RuntimeException(e);
         }
     }
@@ -46,7 +56,7 @@ public class Database {
             return;
         }
 
-        this.rows.put(data[0], new ArrayList<>(List.of(data[0])));
+        this.rows.put(data[0], new ArrayList<>(List.of(data)));
     }
 
     public void addColumn(String name, String defaultValue) {
@@ -70,10 +80,13 @@ public class Database {
     public void writeToFile() {
         try (var writer = new BufferedWriter(new FileWriter(file, false))) {
             writer.write(joinRow(this.headers));
+            writer.write('\n');
             for (var row : this.rows.values()) {
                 writer.write(joinRow(row));
+                writer.write('\n');
             }
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }
