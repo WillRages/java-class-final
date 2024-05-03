@@ -59,6 +59,14 @@ public class Database {
         this.rows.put(data[0], new ArrayList<>(List.of(data)));
     }
 
+    public void deleteRow(String key) {
+        this.rows.remove(key);
+    }
+
+    public void clear() {
+        this.rows.clear();
+    }
+
     public void addColumn(String name, String defaultValue) {
         headers.add(name);
         for (var row : rows.values()) {
