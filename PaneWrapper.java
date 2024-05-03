@@ -38,6 +38,10 @@ public class PaneWrapper {
     }
 
     public static void dropdown(String prompt, String defaultValue, String... options) {
-        JOptionPane.showInputDialog(null, prompt, null, JOptionPane.QUESTION_MESSAGE, null, options, defaultValue);
+        JOptionPane.showInputDialog(null, prompt, windowName, JOptionPane.QUESTION_MESSAGE, null, options, defaultValue);
+    }
+
+    public static Boolean checkbox(String prompt) {
+        JOptionPane.showConfirmDialog(null, prompt, windowName, JOptionPane.YES_NO_OPTION);
     }
 }
