@@ -42,6 +42,7 @@ public class PaneWrapper {
     }
 
     public static Boolean checkbox(String prompt) {
-        JOptionPane.showConfirmDialog(null, prompt, windowName, JOptionPane.YES_NO_OPTION);
+        int r = JOptionPane.showConfirmDialog(null, prompt, windowName, JOptionPane.YES_NO_OPTION);
+        return r == 1;
     }
 }
