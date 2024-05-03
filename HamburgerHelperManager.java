@@ -1,3 +1,5 @@
+import database.Database;
+
 public class HamburgerHelperManager {
 	public static Database database = new Database("assets/data.csv");
 
