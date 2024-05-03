@@ -12,7 +12,8 @@ public class HamburgerHelperEmployee {
     }
 
     public static void main(String[] args) {
-        addEmployee();
+        while (PaneWrapper.checkbox("Add employee?"))
+            addEmployee();
 
         database.writeToFile();
     }
