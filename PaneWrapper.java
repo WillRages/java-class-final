@@ -1,5 +1,9 @@
 import javax.swing.*;
-
+/**
+ * The purpose of this file is to ease the creation of JOptionPane
+ * functionalities, such as dropdowns, inputs, and messages
+ * */
+ 
 public class PaneWrapper {
     public static void say(String message) {
         JOptionPane.showMessageDialog(null, message);
