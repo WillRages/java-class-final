@@ -1,5 +1,8 @@
 package database;
 
+import javax.swing.event.TableModelEvent;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,6 +15,7 @@ public class Database {
     private final ArrayList<String> headers;
     private final HashMap<String, ArrayList<String>> rows = new HashMap<>();
     private final File file;
+    private final Model model;
 
     private ArrayList<String> readList(BufferedReader reader) throws IOException {
         return new ArrayList<>(List.of(reader.readLine().split(",")));
@@ -19,6 +23,7 @@ public class Database {
 
     public Database(String fileName) {
         this.file = new File(fileName);
+        this.model = new Model();
         int line = 0;
         try (var reader = new BufferedReader(new FileReader(file))) {
             if (!reader.ready()) {
@@ -38,6 +43,7 @@ public class Database {
             System.err.println(e + "\nAt line " + line);
             throw new RuntimeException(e);
         }
+        this.model.redoRows();
     }
 
     public Row getRow(String primaryKey) {
@@ -57,6 +63,7 @@ public class Database {
         }
 
         this.rows.put(data[0], new ArrayList<>(List.of(data)));
+        this.model.redoRows();
     }
 
     public void deleteRow(String key) {
@@ -65,6 +72,7 @@ public class Database {
 
     public void clear() {
         this.rows.clear();
+        this.model.redoRows();
     }
 
     public void addColumn(String name, String defaultValue) {
@@ -95,6 +103,78 @@ public class Database {
             }
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    public Model getModel() {
+        return this.model;
+    }
+
+    public class Model implements TableModel {
+        private String[][] rows;
+        private final ArrayList<TableModelListener> listeners;
+
+        private Model() {
+            listeners = new ArrayList<>();
+        }
+
+        private void redoRows() {
+            this.rows = new String[getRowCount()][getColumnCount()];
+            int i = -1;
+            for (var value : Database.this.rows.values()) {
+                ++i;
+                for (int j = 0; j < value.size(); j++) {
+                    this.rows[i][j] = value.get(j);
+                }
+            }
+
+            var event = new TableModelEvent(this);
+            for (var listener : this.listeners) {
+                listener.tableChanged(event);
+            }
+        }
+
+        @Override
+        public int getRowCount() {
+            return Database.this.rows.size();
+        }
+
+        @Override
+        public int getColumnCount() {
+            return Database.this.headers.size();
+        }
+
+        @Override
+        public String getColumnName(int columnIndex) {
+            return Database.this.headers.get(columnIndex);
+        }
+
+        @Override
+        public Class<String> getColumnClass(int columnIndex) {
+            return String.class;
+        }
+
+        @Override
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return false;
+        }
+
+        @Override
+        public String getValueAt(int rowIndex, int columnIndex) {
+            return this.rows[rowIndex][columnIndex];
+        }
+
+        @Override
+        public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+        }
+
+        @Override
+        public void addTableModelListener(TableModelListener l) {
+            listeners.add(l);
+        }
+
+        @Override
+        public void removeTableModelListener(TableModelListener l) {
         }
     }
 }
