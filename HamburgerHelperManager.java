@@ -27,6 +27,10 @@ public class HamburgerHelperManager {
             String role = roleInput.getText();
             String wage = wageInput.getText();
 
+            nameInput.setText("");
+            roleInput.setText("");
+            wageInput.setText("0");
+
             employees.addRow(name, role, wage);
         });
         JButton cancel = PaneWrapper.makeButton("Cancel", e -> {
@@ -52,8 +56,10 @@ public class HamburgerHelperManager {
 
         // add buttons
         c.gridy = 3;
+        c.fill = GridBagConstraints.HORIZONTAL;
         panel.add(add, c);
         c.gridx = 1;
+        c.fill = GridBagConstraints.NONE;
         panel.add(cancel, c);
 
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -97,7 +103,8 @@ public class HamburgerHelperManager {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints c = new GridBagConstraints();
 
-        c.fill = GridBagConstraints.HORIZONTAL;
+        c.anchor = GridBagConstraints.WEST;
+        c.fill = GridBagConstraints.NONE;
         c.gridx = 0;
 
         c.gridy = 0;
@@ -107,7 +114,14 @@ public class HamburgerHelperManager {
         c.gridy = 2;
         panel.add(unitLabel, c);
 
+        c.gridy = 3;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        panel.add(add, c);
         c.gridx = 1;
+        c.fill = GridBagConstraints.NONE;
+        panel.add(cancel, c);
+
+        c.fill = GridBagConstraints.HORIZONTAL;
         c.weightx = 1;
 
         c.gridy = 0;
@@ -116,17 +130,6 @@ public class HamburgerHelperManager {
         panel.add(amountInput, c);
         c.gridy = 2;
         panel.add(unitInput, c);
-
-        c.fill = GridBagConstraints.NONE;
-        c.gridy = 3;
-
-        c.gridx = 0;
-        c.anchor = GridBagConstraints.EAST;
-        panel.add(add, c);
-
-        c.gridx = 1;
-        c.anchor = GridBagConstraints.WEST;
-        panel.add(cancel, c);
 
         return panel;
     }
@@ -138,14 +141,11 @@ public class HamburgerHelperManager {
         return wrapper;
     }
 
-
     public static void main(String[] args) {
         JFrame frame = new JFrame("Title");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
 
         JTabbedPane pane = new JTabbedPane();
-        pane.setLayout(new BorderLayout());
         pane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         pane.addTab("Add Employee", pinTop(addEmployeeMenu()));
         pane.addTab("Add Item", pinTop(addItemMenu()));
@@ -155,7 +155,7 @@ public class HamburgerHelperManager {
         }));
         pane.addTab("View Employees", PaneWrapper.getFromDatabase(employees));
 
-        frame.getContentPane().add(pane, BorderLayout.PAGE_START);
+        frame.getContentPane().add(pane);
         frame.setPreferredSize(new Dimension(640, 480));
         frame.setLocationRelativeTo(null);
 
