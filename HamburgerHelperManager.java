@@ -1,4 +1,5 @@
 import database.Database;
+import ui.LoginManager;
 import ui.PaneWrapper;
 
 import javax.swing.*;
@@ -142,6 +143,9 @@ public class HamburgerHelperManager {
         JFrame frame = new JFrame("Title");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        var cardLayout = new CardLayout();
+        frame.getContentPane().setLayout(cardLayout);
+
         JTabbedPane pane = new JTabbedPane();
         pane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         pane.addTab("Add Employee", pinTop(addEmployeeMenu()));
@@ -152,7 +156,12 @@ public class HamburgerHelperManager {
         }));
         pane.addTab("View Employees", PaneWrapper.getFromDatabase(employees));
 
-        frame.getContentPane().add(pane);
+        LoginManager login = new LoginManager("assets/employees.csv", () -> {
+            cardLayout.show(frame.getContentPane(), "MainApp");
+        });
+
+        frame.getContentPane().add(login, "Login");
+        frame.getContentPane().add(pane, "MainApp");
         frame.setPreferredSize(new Dimension(640, 480));
         frame.setLocationRelativeTo(null);
 
