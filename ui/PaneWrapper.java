@@ -72,6 +72,10 @@ public class PaneWrapper {
         return button;
     }
 
+    public static JTextField makeStringField(String initial) {
+        return makeStringField(initial, s -> {});
+    }
+
     public static JTextField makeStringField(String initial, Consumer<String> onSubmit) {
         JTextField field = new JTextField(initial);
 
@@ -85,6 +89,9 @@ public class PaneWrapper {
         return field;
     }
 
+    public static JFormattedTextField makeIntField(int initial) {
+        return makeIntField(initial, i -> {});
+    }
 
     public static JFormattedTextField makeIntField(int initial, Consumer<Integer> onSubmit) {
         NumberFormat format = NumberFormat.getIntegerInstance();

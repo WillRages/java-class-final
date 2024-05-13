@@ -15,12 +15,9 @@ public class HamburgerHelperManager {
         JLabel roleLabel = new JLabel("Role: ");
         JLabel wageLabel = new JLabel("Wage: ");
 
-        JTextField nameInput = PaneWrapper.makeStringField("", s -> {
-        });
-        JTextField roleInput = PaneWrapper.makeStringField("", s -> {
-        });
-        JTextField wageInput = PaneWrapper.makeIntField(0, i -> {
-        });
+        JTextField nameInput = PaneWrapper.makeStringField("");
+        JTextField roleInput = PaneWrapper.makeStringField("");
+        JTextField wageInput = PaneWrapper.makeIntField(0);
 
         JButton add = PaneWrapper.makeButton("Add", e -> {
             String name = nameInput.getText();
