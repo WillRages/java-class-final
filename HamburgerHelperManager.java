@@ -1,4 +1,6 @@
 import database.Database;
+import ui.LoginManager;
+import ui.MultiForm;
 import ui.PaneWrapper;
 
 import javax.swing.*;
@@ -11,124 +13,28 @@ public class HamburgerHelperManager {
     public static Database inventory = new Database("assets/inventory.csv");
 
     public static JPanel addEmployeeMenu() {
-        JLabel nameLabel = new JLabel("Name: ");
-        JLabel roleLabel = new JLabel("Role: ");
-        JLabel wageLabel = new JLabel("Wage: ");
+        var form = new MultiForm(employees::addRow);
 
-        JTextField nameInput = PaneWrapper.makeStringField("");
-        JTextField roleInput = PaneWrapper.makeStringField("");
-        JTextField wageInput = PaneWrapper.makeIntField(0);
+        form.addInput("Name: ", PaneWrapper.makeStringField(""));
+        form.addInput("Role: ", PaneWrapper.makeStringField(""));
+        form.addInput("Wage: ", PaneWrapper.makeIntField(0));
+        form.addInput("Passkey: ", PaneWrapper.makeStringField(""));
 
-        JButton add = PaneWrapper.makeButton("Add", e -> {
-            String name = nameInput.getText();
-            String role = roleInput.getText();
-            String wage = wageInput.getText();
+        form.addButtons();
 
-            nameInput.setText("");
-            roleInput.setText("");
-            wageInput.setText("0");
-
-            employees.addRow(name, role, wage);
-        });
-        JButton cancel = PaneWrapper.makeButton("Cancel", e -> {
-            nameInput.setText("");
-            roleInput.setText("");
-            wageInput.setText("0");
-        });
-
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-
-        c.anchor = GridBagConstraints.WEST;
-        c.fill = GridBagConstraints.NONE;
-        c.gridx = 0;
-
-        // add labels for text boxes
-        c.gridy = 0;
-        panel.add(nameLabel, c);
-        c.gridy = 1;
-        panel.add(roleLabel, c);
-        c.gridy = 2;
-        panel.add(wageLabel, c);
-
-        // add buttons
-        c.gridy = 3;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(add, c);
-        c.gridx = 1;
-        c.fill = GridBagConstraints.NONE;
-        panel.add(cancel, c);
-
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 1;
-
-        c.gridy = 0;
-        panel.add(nameInput, c);
-        c.gridy = 1;
-        panel.add(roleInput, c);
-        c.gridy = 2;
-        panel.add(wageInput, c);
-
-        return panel;
+        return form;
     }
 
     public static JPanel addItemMenu() {
-        JLabel typeLabel = new JLabel("Item Type: ");
-        JLabel amountLabel = new JLabel("Amount: ");
-        JLabel unitLabel = new JLabel("Units (kg, oz, etc.): ");
+        var form = new MultiForm(inventory::addRow);
 
-        JTextField typeInput = PaneWrapper.makeStringField("", s -> {
-        });
-        JTextField amountInput = PaneWrapper.makeStringField("", s -> {
-        });
-        JTextField unitInput = PaneWrapper.makeStringField("", s -> {
-        });
+        form.addInput("Item Type: ", PaneWrapper.makeStringField(""));
+        form.addInput("Amount: ", PaneWrapper.makeStringField(""));
+        form.addInput("Units (kg, oz, etc.): ", PaneWrapper.makeStringField(""));
 
-        JButton add = PaneWrapper.makeButton("Add", e -> {
-            String type = typeInput.getText();
-            String amount = amountInput.getText();
-            String units = unitInput.getText();
+        form.addButtons();
 
-            inventory.addRow(type, amount, units);
-        });
-        JButton cancel = PaneWrapper.makeButton("Cancel", e -> {
-            typeInput.setText("");
-            amountInput.setText("");
-            unitInput.setText("");
-        });
-
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
-
-        c.anchor = GridBagConstraints.WEST;
-        c.fill = GridBagConstraints.NONE;
-        c.gridx = 0;
-
-        c.gridy = 0;
-        panel.add(typeLabel, c);
-        c.gridy = 1;
-        panel.add(amountLabel, c);
-        c.gridy = 2;
-        panel.add(unitLabel, c);
-
-        c.gridy = 3;
-        c.fill = GridBagConstraints.HORIZONTAL;
-        panel.add(add, c);
-        c.gridx = 1;
-        c.fill = GridBagConstraints.NONE;
-        panel.add(cancel, c);
-
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.weightx = 1;
-
-        c.gridy = 0;
-        panel.add(typeInput, c);
-        c.gridy = 1;
-        panel.add(amountInput, c);
-        c.gridy = 2;
-        panel.add(unitInput, c);
-
-        return panel;
+        return form;
     }
 
     public static JPanel pinTop(JPanel panel) {
@@ -142,6 +48,9 @@ public class HamburgerHelperManager {
         JFrame frame = new JFrame("Title");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        var cardLayout = new CardLayout();
+        frame.getContentPane().setLayout(cardLayout);
+
         JTabbedPane pane = new JTabbedPane();
         pane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         pane.addTab("Add Employee", pinTop(addEmployeeMenu()));
@@ -152,7 +61,12 @@ public class HamburgerHelperManager {
         }));
         pane.addTab("View Employees", PaneWrapper.getFromDatabase(employees));
 
-        frame.getContentPane().add(pane);
+        LoginManager login = new LoginManager("assets/employees.csv", () -> {
+            cardLayout.show(frame.getContentPane(), "MainApp");
+        });
+
+        frame.getContentPane().add(login, "Login");
+        frame.getContentPane().add(pane, "MainApp");
         frame.setPreferredSize(new Dimension(640, 480));
         frame.setLocationRelativeTo(null);
 

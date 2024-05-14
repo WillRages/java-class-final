@@ -50,6 +50,8 @@ public class Database {
         HashMap<String, String> map = new HashMap<>(this.headers.size());
         final var row = rows.get(primaryKey);
 
+        if (row == null) return null;
+
         for (int i = 0; i < this.headers.size(); i++) {
             map.put(headers.get(i), row.get(i));
         }
