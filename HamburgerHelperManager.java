@@ -9,10 +9,10 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 public class HamburgerHelperManager {
-    public static Database employees = new Database("assets/employees.csv");
-    public static Database inventory = new Database("assets/inventory.csv");
+    private static final Database employees = new Database("assets/employees.csv");
+    private static final Database inventory = new Database("assets/inventory.csv");
 
-    public static JPanel addEmployeeMenu() {
+    private static JPanel addEmployeeMenu() {
         var form = new MultiForm(employees::addRow);
 
         form.addInput("Name: ", PaneWrapper.makeStringField(""));
@@ -25,7 +25,7 @@ public class HamburgerHelperManager {
         return form;
     }
 
-    public static JPanel addItemMenu() {
+    private static JPanel addItemMenu() {
         var form = new MultiForm(inventory::addRow);
 
         form.addInput("Item Type: ", PaneWrapper.makeStringField(""));
@@ -54,12 +54,16 @@ public class HamburgerHelperManager {
         JTabbedPane pane = new JTabbedPane();
         pane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         pane.addTab("Add Employee", pinTop(addEmployeeMenu()));
-        pane.addTab("Add Item", pinTop(addItemMenu()));
         pane.addTab("Clear Employees", PaneWrapper.makeButton("Clear", e -> {
             boolean choice = PaneWrapper.checkbox("Really clear employee data?");
-            if (choice) employees.clear();
+            if (choice) {
+                employees.clear();
+                PaneWrapper.say("Cleared employee table.");
+            }
         }));
         pane.addTab("View Employees", PaneWrapper.getFromDatabase(employees));
+        pane.addTab("Order Item", pinTop(addItemMenu()));
+        pane.addTab("View Inventory", PaneWrapper.getFromDatabase(inventory));
 
         LoginManager login = new LoginManager("assets/employees.csv", () -> {
             cardLayout.show(frame.getContentPane(), "MainApp");

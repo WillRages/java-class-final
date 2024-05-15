@@ -61,7 +61,6 @@ public class MultiForm extends JPanel {
         c.gridx = 1;
         this.add(cancel, c);
 
-//        c.weightx = 1;
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         this.add(save, c);
