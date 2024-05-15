@@ -35,7 +35,8 @@ public class Database {
                 ++line;
                 ArrayList<String> cols = readList(reader);
                 if (cols.size() != headers.size()) {
-                    throw new Exception(String.format("Wrong column size %d, expected %d", cols.size(), headers.size()));
+                    throw new Exception(String.format("Wrong column size %d, expected %d", cols.size(),
+                            headers.size()));
                 }
                 this.rows.put(cols.getFirst(), cols);
             }
@@ -122,18 +123,16 @@ public class Database {
 
         private void redoRows() {
             this.rows = new String[getRowCount()][getColumnCount()];
-            int i = -1;
+            int i = 0;
             for (var value : Database.this.rows.values()) {
-                ++i;
                 for (int j = 0; j < value.size(); j++) {
                     this.rows[i][j] = value.get(j);
                 }
+                ++i;
             }
 
             var event = new TableModelEvent(this);
-            for (var listener : this.listeners) {
-                listener.tableChanged(event);
-            }
+            this.listeners.forEach(l -> l.tableChanged(event));
         }
 
         @Override
