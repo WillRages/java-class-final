@@ -29,6 +29,20 @@ public class HamburgerHelperEmployee { // class start
 		return form;
 	}
 
+	public static JPanel askVacant(){
+		var form = new MultiForm(s -> {
+
+		});
+		form.addInput("Employee's Name: ", PaneWrapper.makeStringField(""));
+		form.addInput("Requested Hours: ", PaneWrapper.makeIntField(0));
+		form.addInput("Cause of the Request: ", PaneWrapper.makeStringField(""));
+
+		form.addButtons();
+
+		return form;
+	}
+
+
 	public static JPanel pinTop(JPanel panel) { // pinTop start
 		var wrapper = new JPanel(new BorderLayout());
 		wrapper.add(panel, BorderLayout.NORTH);
@@ -43,6 +57,8 @@ public class HamburgerHelperEmployee { // class start
 		pane.addTab("Add Orders", pinTop(addOrder()));
 		pane.addTab("View Orders", PaneWrapper.getFromDatabase(orders));
 		pane.addTab("View Employees", PaneWrapper.getFromDatabase(employees));
+		pane.addTab("Ask Vacant Hours", pinTop(askVacant()));
+
 		frame.getContentPane().add(pane);
 		frame.setPreferredSize(new Dimension(640, 480));
 		frame.setLocationRelativeTo(null);
