@@ -13,6 +13,7 @@ public class HamburgerHelperEmployee { // class start
     public static Database employees = new Database("assets/employees.csv");
     public static Database inventory = new Database("assets/inventory.csv");
     public static Database orders = new Database("assets/orders.csv");
+    public static Database vacancy = new Database("assets/vacantRequest.csv");
 
     public static JPanel addOrder() {
         var form = new MultiForm(s -> {
@@ -31,12 +32,14 @@ public class HamburgerHelperEmployee { // class start
 
     public static JPanel askVacant() {
         var form = new MultiForm(s -> {
-
+			vacancy.addRow(s);
+            PaneWrapper.say(Arrays.toString(s));
         });
 
         form.addInput("Employee's Name: ", PaneWrapper.makeStringField(""));
         form.addInput("Requested Hours: ", PaneWrapper.makeIntField(0));
         form.addInput("Cause of the Request: ", PaneWrapper.makeStringField(""));
+		form.addInput("Role: ", PaneWrapper.makeStringField(""));
 
         form.addButtons();
 
@@ -71,7 +74,8 @@ public class HamburgerHelperEmployee { // class start
         frame.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                inventory.writeToFile();
+                orders.writeToFile();
+                vacancy.writeToFile();
             }
         });
     } // main end
