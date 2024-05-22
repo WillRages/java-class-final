@@ -46,7 +46,6 @@ public class HamburgerHelperEmployee { // class start
         return form;
     }
 
-
     public static JPanel pinTop(JPanel panel) { // pinTop start
         var wrapper = new JPanel(new BorderLayout());
         wrapper.add(panel, BorderLayout.NORTH);
@@ -54,7 +53,7 @@ public class HamburgerHelperEmployee { // class start
     } // pinTop end
 
     public static void main(String[] args) { // main start
-        JFrame frame = new JFrame("Title");
+        JFrame frame = new JFrame("Hamburger Helper Employee");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JTabbedPane pane = new JTabbedPane();
@@ -62,6 +61,7 @@ public class HamburgerHelperEmployee { // class start
         pane.addTab("Add Orders", pinTop(addOrder()));
         pane.addTab("View Orders", PaneWrapper.getFromDatabase(orders));
         pane.addTab("View Employees", PaneWrapper.getFromDatabase(employees));
+        pane.addTab("View Items", PaneWrapper.getFromDatabase(inventory));
         pane.addTab("Ask Vacant Hours", pinTop(askVacant()));
 
         frame.getContentPane().add(pane);
