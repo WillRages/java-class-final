@@ -1,20 +1,13 @@
-import database.Database;
 import ui.LoginManager;
 import ui.MultiForm;
 import ui.PaneWrapper;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
-public class HamburgerHelperManager {
-    private static final Database employees = new Database("assets/employees.csv");
-    private static final Database inventory = new Database("assets/inventory.csv");
-    private static final Database requests = new Database("assets/vacantRequest.csv");
-
+public class HamburgerHelperManager extends JPanel {
     private static JPanel addEmployeeMenu() {
-        var form = new MultiForm(employees::addRow);
+        var form = new MultiForm(HamburgerHelperMain.employees::addRow);
 
         form.addInput("Name: ", PaneWrapper.makeStringField(""));
         form.addInput("Role: ", PaneWrapper.makeStringField(""));
@@ -27,7 +20,7 @@ public class HamburgerHelperManager {
     }
 
     private static JPanel addItemMenu() {
-        var form = new MultiForm(inventory::addRow);
+        var form = new MultiForm(HamburgerHelperMain.inventory::addRow);
 
         form.addInput("Item Type: ", PaneWrapper.makeStringField(""));
         form.addInput("Amount: ", PaneWrapper.makeStringField(""));
@@ -40,7 +33,7 @@ public class HamburgerHelperManager {
 
     private static JPanel addRequestMenu() {
         var panel = new JPanel(new GridBagLayout());
-        var dataView = PaneWrapper.getFromDatabase(requests);
+        var dataView = PaneWrapper.getFromDatabase(HamburgerHelperMain.vacancy);
 
         var nameLabel = new JLabel("Name:");
         var nameField = PaneWrapper.makeStringField("");
@@ -48,8 +41,8 @@ public class HamburgerHelperManager {
         var approve = PaneWrapper.makeButton("Approve", e -> {
             var name = nameField.getText();
 
-            var request = requests.getRow(name);
-            var employee = employees.getRow(name);
+            var request = HamburgerHelperMain.vacancy.getRow(name);
+            var employee = HamburgerHelperMain.employees.getRow(name);
 
             if (employee == null) {
                 PaneWrapper.err("No employee named " + nameField.getText());
@@ -64,19 +57,19 @@ public class HamburgerHelperManager {
             var vacancy = employee.getDouble("Vacancy");
             vacancy += request.getDouble("Hours");
 
-            employees.addRow(
+            HamburgerHelperMain.employees.addRow(
                     employee.getString("Name"), employee.getString("Job"), employee.getString("Wage"),
                     employee.getString("Passkey"), "" + vacancy
             );
 
-            requests.deleteRow(nameField.getText());
+            HamburgerHelperMain.vacancy.deleteRow(nameField.getText());
 
             nameField.setText("");
             PaneWrapper.say("Approved");
         });
 
         var deny = PaneWrapper.makeButton("Deny", e -> {
-            requests.deleteRow(nameField.getText());
+            HamburgerHelperMain.vacancy.deleteRow(nameField.getText());
 
             nameField.setText("");
             PaneWrapper.say("Denied D:");
@@ -104,54 +97,31 @@ public class HamburgerHelperManager {
         return panel;
     }
 
-    public static JPanel pinTop(JPanel panel) {
-        var wrapper = new JPanel(new BorderLayout());
-
-        wrapper.add(panel, BorderLayout.NORTH);
-        return wrapper;
-    }
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Title");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+    public HamburgerHelperManager() {
         var cardLayout = new CardLayout();
-        frame.getContentPane().setLayout(cardLayout);
+        this.setLayout(cardLayout);
 
         JTabbedPane pane = new JTabbedPane();
         pane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-        pane.addTab("Add Employee", pinTop(addEmployeeMenu()));
+        pane.addTab("Add Employee", HamburgerHelperMain.pinTop(addEmployeeMenu()));
         pane.addTab("Clear Employees", PaneWrapper.makeButton("Clear", e -> {
             boolean choice = PaneWrapper.checkbox("Really clear employee data?");
             if (choice) {
-                employees.clear();
+                HamburgerHelperMain.employees.clear();
                 PaneWrapper.say("Cleared employee table.");
             }
         }));
-        pane.addTab("View Employees", PaneWrapper.getFromDatabase(employees));
-        pane.addTab("Order Item", pinTop(addItemMenu()));
-        pane.addTab("View Inventory", PaneWrapper.getFromDatabase(inventory));
-        pane.addTab("Time Off Requests", pinTop(addRequestMenu()));
+
+        pane.addTab("View Employees", PaneWrapper.getFromDatabase(HamburgerHelperMain.employees));
+        pane.addTab("Order Item", HamburgerHelperMain.pinTop(addItemMenu()));
+        pane.addTab("View Inventory", PaneWrapper.getFromDatabase(HamburgerHelperMain.inventory));
+        pane.addTab("Time Off Requests", HamburgerHelperMain.pinTop(addRequestMenu()));
 
         LoginManager login = new LoginManager("assets/employees.csv", () -> {
-            cardLayout.show(frame.getContentPane(), "MainApp");
+            cardLayout.show(this, "MainApp");
         });
 
-        frame.getContentPane().add(login, "Login");
-        frame.getContentPane().add(pane, "MainApp");
-        frame.setPreferredSize(new Dimension(640, 480));
-        frame.setLocationRelativeTo(null);
-
-        frame.pack();
-        frame.setVisible(true);
-
-        frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                employees.writeToFile();
-                inventory.writeToFile();
-                requests.writeToFile();
-            }
-        });
+        this.add(login, "Login");
+        this.add(pane, "MainApp");
     }
 }

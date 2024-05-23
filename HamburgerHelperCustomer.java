@@ -1,20 +1,14 @@
 import database.Database;
-import ui.LoginManager;
 import ui.MultiForm;
 import ui.PaneWrapper;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 
-public class HamburgerHelperCustomer {
-    private static final Database employees = new Database("assets/employees.csv");
-    private static final Database inventory = new Database("assets/inventory.csv");
-
+public class HamburgerHelperCustomer extends JPanel {
     private static JPanel addEmployeeMenu() {
-        var form = new MultiForm(employees::addRow);
+        var form = new MultiForm(HamburgerHelperMain.employees::addRow);
         JButton button = new JButton("Starve >:3");
 
         form.addInput("Name: ", PaneWrapper.makeStringField("Nugget"));
@@ -30,7 +24,7 @@ public class HamburgerHelperCustomer {
     }
 
     private static JPanel addItemMenu() {
-        var form = new MultiForm(inventory::addRow);
+        var form = new MultiForm(HamburgerHelperMain.inventory::addRow);
 
         form.addInput("Item Type: ", PaneWrapper.makeStringField(""));
         form.addInput("Amount: ", PaneWrapper.makeStringField(""));
@@ -48,12 +42,9 @@ public class HamburgerHelperCustomer {
         return wrapper;
     }
 
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Hamburger Helper! (Customer)");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+    public HamburgerHelperCustomer() {
         var cardLayout = new CardLayout();
-        frame.getContentPane().setLayout(cardLayout);
+        this.setLayout(cardLayout);
 
         JTabbedPane pane = new JTabbedPane();
         pane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
@@ -61,26 +52,14 @@ public class HamburgerHelperCustomer {
         pane.addTab("Clear Employees", PaneWrapper.makeButton("Clear", e -> {
             boolean choice = PaneWrapper.checkbox("Really clear employee data?");
             if (choice) {
-                employees.clear();
+                HamburgerHelperMain.employees.clear();
                 PaneWrapper.say("Cleared employee table.");
             }
         }));
-        pane.addTab("View Employees", PaneWrapper.getFromDatabase(employees));
+        pane.addTab("View Employees", PaneWrapper.getFromDatabase(HamburgerHelperMain.employees));
         pane.addTab("Order Item", pinTop(addItemMenu()));
-        pane.addTab("View Inventory", PaneWrapper.getFromDatabase(inventory));
-        frame.getContentPane().add(pane, "MainApp");
-        frame.setPreferredSize(new Dimension(640, 480));
-        frame.setLocationRelativeTo(null);
+        pane.addTab("View Inventory", PaneWrapper.getFromDatabase(HamburgerHelperMain.inventory));
 
-        frame.pack();
-        frame.setVisible(true);
-
-        frame.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                employees.writeToFile();
-                inventory.writeToFile();
-            }
-        });
+        this.add(pane, "MainApp");
     }
 }

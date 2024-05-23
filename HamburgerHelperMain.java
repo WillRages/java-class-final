@@ -1,63 +1,47 @@
+import database.Database;
 import ui.PaneWrapper;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class HamburgerHelperMain {
+    public static Database employees = new Database("assets/employees.csv");
+    public static Database inventory = new Database("assets/inventory.csv");
+    public static Database orders = new Database("assets/orders.csv");
+    public static Database vacancy = new Database("assets/vacantRequest.csv");
+
+    public static JPanel pinTop(JPanel panel) {
+        var wrapper = new JPanel(new BorderLayout());
+        wrapper.add(panel, BorderLayout.NORTH);
+        return wrapper;
+    }
+
     public static void main(String[] args) {
-        var strings = new ArrayList<String>();
-        strings.add("blah 1");
-        strings.add("blah 2");
-        strings.add("blah 3");
-        strings.add("blah 4");
-        strings.add("blah 5");
+        var frame = new JFrame();
 
-        var stuffs = new JTable();
-        var model = new DefaultTableModel();
-        model.addColumn("blah", strings.toArray());
-        model.addColumn("blah2", strings.toArray());
-        stuffs.setModel(model);
+        var panel = new JPanel();
+        var cardLayout = new CardLayout();
+        panel.setLayout(cardLayout);
 
-        var saveButton = PaneWrapper.makeButton("Save", e -> {
-        });
+        var manager = new HamburgerHelperManager();
+        var employee = new HamburgerHelperEmployee();
+        var customer = new HamburgerHelperCustomer();
 
-        var cancelButton = PaneWrapper.makeButton("Cancel", e -> {
-            PaneWrapper.err("Canceled");
-        });
+        panel.add(manager, "Manager");
+        panel.add(employee, "Employee");
+        panel.add(customer, "Customer");
 
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints c = new GridBagConstraints();
+        var multibox = PaneWrapper.makeDropdown(s -> cardLayout.show(panel, s),
+                "Manager", "Employee", "Customer");
 
-        c.fill = GridBagConstraints.BOTH;
-        c.gridx = 0;
+        var content = frame.getContentPane();
+        content.setLayout(new BorderLayout());
 
-        c.weightx = 1.0;
-        c.weighty = 1.0;
-
-        c.gridy = 0;
-        panel.add(stuffs, c);
-        c.weightx = 0;
-        c.weighty = 0;
-
-        c.gridy = 1;
-        panel.add(saveButton, c);
-
-        c.gridy = 2;
-        panel.add(cancelButton, c);
-
-        JFrame frame = new JFrame("Title");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setLayout(new BorderLayout());
-
-        JTabbedPane tabbedPane = new JTabbedPane();
-        tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-        tabbedPane.addTab("asdf 1", panel);
-
-        frame.getContentPane().add(tabbedPane, BorderLayout.CENTER);
+        content.add(multibox, BorderLayout.NORTH);
+        content.add(panel, BorderLayout.SOUTH);
 
         frame.pack();
+        frame.setPreferredSize(new Dimension(640, 480));
         frame.setVisible(true);
     }
 }

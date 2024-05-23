@@ -5,7 +5,6 @@ import database.Database;
 import javax.swing.*;
 import javax.swing.table.TableModel;
 import javax.swing.text.NumberFormatter;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.text.NumberFormat;
 import java.util.function.Consumer;
@@ -49,7 +48,8 @@ public class PaneWrapper {
     }
 
     public static void dropdown(String prompt, String defaultValue, String... options) {
-        JOptionPane.showInputDialog(null, prompt, windowName, JOptionPane.QUESTION_MESSAGE, null, options, defaultValue);
+        JOptionPane.showInputDialog(null, prompt, windowName, JOptionPane.QUESTION_MESSAGE, null, options,
+                defaultValue);
     }
 
     public static Boolean checkbox(String prompt) {
@@ -112,6 +112,18 @@ public class PaneWrapper {
         });
 
         return field;
+    }
+
+    public static JComboBox<String> makeDropdown(Consumer<String> onSubmit, String... values) {
+        var comboBox = new JComboBox<>(values);
+        comboBox.addActionListener(new AbstractAction() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                onSubmit.accept(((String) comboBox.getSelectedItem()));
+            }
+        });
+
+        return comboBox;
     }
 
     public static JScrollPane getFromDatabase(Database database) {
