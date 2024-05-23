@@ -20,6 +20,7 @@ public class HamburgerHelperMain {
 
     public static void main(String[] args) {
         var frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         var panel = new JPanel();
         var cardLayout = new CardLayout();
