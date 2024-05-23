@@ -3,6 +3,8 @@ import ui.PaneWrapper;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class HamburgerHelperMain {
     public static Database employees = new Database("assets/employees.csv");
@@ -43,5 +45,15 @@ public class HamburgerHelperMain {
         frame.pack();
         frame.setPreferredSize(new Dimension(640, 480));
         frame.setVisible(true);
+
+        frame.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosed(WindowEvent e) {
+                employees.writeToFile();
+                inventory.writeToFile();
+                orders.writeToFile();
+                vacancy.writeToFile();
+            }
+        });
     }
 }

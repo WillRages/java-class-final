@@ -18,7 +18,7 @@ public class Database {
     private final Model model;
 
     private ArrayList<String> readList(BufferedReader reader) throws IOException {
-        return new ArrayList<>(List.of(reader.readLine().split(",")));
+        return new ArrayList<>(List.of(reader.readLine().split(";")));
     }
 
     public Database(String fileName) {
@@ -91,7 +91,7 @@ public class Database {
 
         for (int i = 0; i < row.size(); ++i) {
             builder.append(row.get(i));
-            if (i != row.size() - 1) builder.append(',');
+            if (i != row.size() - 1) builder.append(';');
         }
 
         return builder.toString();

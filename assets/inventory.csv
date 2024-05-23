@@ -1,2 +1,2 @@
-ItemType,Amount,Units
-Cheese,5,kg
+ItemType;Amount;Units
+Cheese;5;kg
