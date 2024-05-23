@@ -32,14 +32,23 @@ public class HamburgerHelperEmployee { // class start
 
     public static JPanel askVacant() {
         var form = new MultiForm(s -> {
-			vacancy.addRow(s);
+            var row = employees.getRow(s[0]);
+
+            if (row == null) {
+                PaneWrapper.err("No employee named " + s[0]);
+                return;
+            }
+
+            var strings = new String[s.length + 1];
+            System.arraycopy(s, 0, strings, 0, s.length);
+            strings[s.length] = row.getString("Job");
+            vacancy.addRow(strings);
             PaneWrapper.say(Arrays.toString(s));
         });
 
         form.addInput("Employee's Name: ", PaneWrapper.makeStringField(""));
         form.addInput("Requested Hours: ", PaneWrapper.makeIntField(0));
         form.addInput("Cause of the Request: ", PaneWrapper.makeStringField(""));
-		form.addInput("Role: ", PaneWrapper.makeStringField(""));
 
         form.addButtons();
 
