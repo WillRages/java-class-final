@@ -71,6 +71,7 @@ public class Database {
 
     public void deleteRow(String key) {
         this.rows.remove(key);
+        this.model.redoRows();
     }
 
     public void clear() {
