@@ -1,15 +1,15 @@
 package ui;
 
 import database.Database;
+import database.Row;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.function.Function;
 
 public class LoginManager extends JPanel {
 
-    public LoginManager(String credentialPath, Runnable onSubmit) {
-        var database = new Database(credentialPath);
-
+    public LoginManager(Database database, Function<Row, Boolean> validator, Runnable onSubmit) {
         JLabel usernameLabel = new JLabel("Username: ");
         JLabel passkeyLabel = new JLabel("Password: ");
 
@@ -24,8 +24,8 @@ public class LoginManager extends JPanel {
                 PaneWrapper.err("Unknown user " + username);
                 return;
             }
-            if (!row.getString("Job").equals("Manager")) {
-                PaneWrapper.err("User " + username + " is not a manager");
+            if (!validator.apply(row)) {
+                PaneWrapper.err("Invalid user");
                 return;
             }
             if (!row.getString("Passkey").equals(passkey)) {

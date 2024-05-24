@@ -117,9 +117,15 @@ public class HamburgerHelperManager extends JPanel {
         pane.addTab("View Inventory", PaneWrapper.getFromDatabase(HamburgerHelperMain.inventory));
         pane.addTab("Time Off Requests", HamburgerHelperMain.pinTop(addRequestMenu()));
 
-        LoginManager login = new LoginManager("assets/employees.csv", () -> {
-            cardLayout.show(this, "MainApp");
-        });
+        LoginManager login = new LoginManager(
+                HamburgerHelperMain.employees,
+                row -> {
+                    var valid = row.getString("Job").equals("Manager");
+                    if (!valid) PaneWrapper.err("User " + row.getString("Name") + " is not a manager");
+                    return valid;
+                },
+                () -> cardLayout.show(this, "MainApp")
+        );
 
         this.add(login, "Login");
         this.add(pane, "MainApp");

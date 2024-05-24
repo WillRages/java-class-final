@@ -1,3 +1,4 @@
+import ui.LoginManager;
 import ui.MultiForm;
 import ui.PaneWrapper;
 
@@ -50,7 +51,7 @@ public class HamburgerHelperEmployee extends JPanel { // class start
         var cardLayout = new CardLayout();
         this.setLayout(cardLayout);
 
-        JTabbedPane pane = new JTabbedPane();
+        var pane = new JTabbedPane();
         pane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         pane.addTab("Add Orders", HamburgerHelperMain.pinTop(addOrder()));
         pane.addTab("View Orders", PaneWrapper.getFromDatabase(HamburgerHelperMain.orders));
@@ -58,6 +59,13 @@ public class HamburgerHelperEmployee extends JPanel { // class start
         pane.addTab("View Items", PaneWrapper.getFromDatabase(HamburgerHelperMain.inventory));
         pane.addTab("Ask Vacant Hours", HamburgerHelperMain.pinTop(askVacant()));
 
-        this.add(pane);
+        var loginManager = new LoginManager(
+                HamburgerHelperMain.employees,
+                row -> true,
+                () -> cardLayout.show(this, "MainApp")
+        );
+
+        this.add(loginManager, "Login");
+        this.add(pane, "MainApp");
     }
 }
