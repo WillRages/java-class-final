@@ -67,7 +67,7 @@ public class HamburgerHelperEmployee extends JPanel { // class start
                 () -> cardLayout.show(this, "MainApp")
         );
 
-        this.add(loginManager, "Login");
+        //this.add(loginManager, "Login");
         this.add(pane, "MainApp");
     }
 }
