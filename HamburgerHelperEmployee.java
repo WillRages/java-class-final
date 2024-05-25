@@ -13,7 +13,9 @@ public class HamburgerHelperEmployee extends JPanel { // class start
             PaneWrapper.say(Arrays.toString(s));
         });
 
-        form.addInput("Order: ", PaneWrapper.makeStringField(""));
+        form.addInput("Main Dish: ", PaneWrapper.makeStringField(""));
+        form.addInput("Side Dish: ", PaneWrapper.makeStringField(""));
+        form.addInput("Drink: ", PaneWrapper.makeStringField(""));
         form.addInput("Address: ", PaneWrapper.makeStringField(""));
         form.addInput("Price: ", PaneWrapper.makeIntField(0));
 
