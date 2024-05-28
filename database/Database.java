@@ -15,15 +15,20 @@ public class Database {
     private final ArrayList<String> headers;
     private final HashMap<String, ArrayList<String>> rows = new HashMap<>();
     private final File file;
-    private final Model model;
+    private final Model model = new Model();
 
     private ArrayList<String> readList(BufferedReader reader) throws IOException {
         return new ArrayList<>(List.of(reader.readLine().split(";")));
     }
 
+    public Database(ArrayList<String> headers) {
+        this.file = null;
+        this.headers = headers;
+        this.model.redoRows();
+    }
+
     public Database(String fileName) {
         this.file = new File(fileName);
-        this.model = new Model();
         int line = 0;
         try (var reader = new BufferedReader(new FileReader(file))) {
             if (!reader.ready()) {
