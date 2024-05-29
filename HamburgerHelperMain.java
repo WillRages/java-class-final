@@ -38,10 +38,10 @@ public class HamburgerHelperMain {
                 "Manager", "Employee", "Customer");
 
         var content = frame.getContentPane();
-        content.setLayout(new BorderLayout());
+        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 
-        content.add(multibox, BorderLayout.NORTH);
-        content.add(panel, BorderLayout.SOUTH);
+        content.add(multibox);
+        content.add(panel);
 
         frame.pack();
         frame.setPreferredSize(new Dimension(640, 480));
