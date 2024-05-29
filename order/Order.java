@@ -2,12 +2,15 @@ package order;
 
 import order.Ingredient.Type;
 
+import javax.swing.*;
+import javax.swing.event.ListDataListener;
+import java.util.ArrayList;
 import java.util.List;
 
-public class Order {
-    //Burgers	0.25lbs Beef, 2 buns, 0.25lbs Butter	$1.99
+import static order.Order.MenuItems.*;
 
-    public enum Orders {
+public class Order {
+    public enum MenuItems {
         Burger(List.of(
                 new Ingredient(0.25, Type.BeefLbs),
                 new Ingredient(2, Type.Buns),
@@ -201,7 +204,7 @@ public class Order {
         private final List<Ingredient> ingredients;
         private final double price;
 
-        Orders(List<Ingredient> ingredients, double price) {
+        MenuItems(List<Ingredient> ingredients, double price) {
             this.ingredients = ingredients;
             this.price = price;
         }
@@ -212,6 +215,90 @@ public class Order {
 
         public double getPrice() {
             return price;
+        }
+    }
+
+    // burgers fries sandwiches drinks additions
+    public static MenuItems[] burgers = new MenuItems[]{
+            Burger,
+            Cheeseburger,
+            SupersizeBurger,
+            HeartAttackBurger,
+            HeartAttackCheeseburger,
+            SupersizeHeartAttackCheeseburger,
+            DoubleSupersizeHeartAttackCheeseburger,
+            QuintupleSupersizeHeartAttackCheeseburger,
+            DoubleSupersizeHeartAttackBurger,
+            QuintupleSupersizeHeartAttackBurger,
+            THE_CHUCK_NORRIS_BURGER,
+    };
+
+    public static MenuItems[] fries = new MenuItems[]{
+            Fry,
+            SmallFries,
+            MediumFries,
+            LargeFries,
+            XLFries,
+            SupersizeFries,
+    };
+
+    public static MenuItems[] sandwiches = new MenuItems[]{
+            ChickenSandwich,
+            ChickenCheeseSandwich,
+            DoubleChickenSandwich,
+            DoubleChickenCheeseSandwich,
+            QuintupleChickenSandwich,
+            QuintupleChickenCheeseSandwich,
+    };
+
+    public static MenuItems[] drinks = new MenuItems[]{
+            SmallDrink,
+            MediumDrink,
+            LargeDrink,
+            XLDrink,
+            THE_CHONKER_DRINK,
+    };
+
+    public static MenuItems[] additions = new MenuItems[]{
+            Onion,
+            Pickle,
+            Tomato,
+            Lettuce,
+            ThousandIsland,
+            Spinach,
+            PeanutButter,
+            GoatCheese,
+            Ketchup,
+            Mustard,
+            Medidip,
+            SourCream,
+            WorcestershireSauce,
+            Salt,
+            Pepper,
+            Parmesan,
+            Mayo,
+    };
+
+    public final ArrayList<MenuItems> items = new ArrayList<>();
+    public final Model model = new Model();
+
+    public class Model implements ListModel<JPanel> {
+        @Override
+        public int getSize() {
+            return Order.this.items.size();
+        }
+
+        @Override
+        public JPanel getElementAt(int index) {
+            return null;
+        }
+
+        @Override
+        public void addListDataListener(ListDataListener l) {
+        }
+
+        @Override
+        public void removeListDataListener(ListDataListener l) {
         }
     }
 }
