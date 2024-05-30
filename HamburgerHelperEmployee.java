@@ -64,7 +64,7 @@ public class HamburgerHelperEmployee extends JPanel { // class start
         var loginManager = new LoginManager(
                 HamburgerHelperMain.employees,
                 row -> true,
-                () -> cardLayout.show(this, "MainApp")
+                name -> cardLayout.show(this, "MainApp")
         );
 
         this.add(loginManager, "Login");

@@ -5,11 +5,11 @@ import database.Row;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class LoginManager extends JPanel {
-
-    public LoginManager(Database database, Function<Row, Boolean> validator, Runnable onSubmit) {
+    public LoginManager(Database database, Function<Row, Boolean> validator, Consumer<String> onSubmit) {
         JLabel usernameLabel = new JLabel("Username: ");
         JLabel passkeyLabel = new JLabel("Password: ");
 
@@ -32,7 +32,7 @@ public class LoginManager extends JPanel {
                 PaneWrapper.err("Wrong password");
                 return;
             }
-            onSubmit.run();
+            onSubmit.accept(username);
         });
 
         var layout = new GridBagLayout();

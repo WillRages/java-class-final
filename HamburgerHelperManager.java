@@ -124,7 +124,7 @@ public class HamburgerHelperManager extends JPanel {
                     if (!valid) PaneWrapper.err("User " + row.getString("Name") + " is not a manager");
                     return valid;
                 },
-                () -> cardLayout.show(this, "MainApp")
+                name -> cardLayout.show(this, "MainApp")
         );
 
         this.add(login, "Login");
