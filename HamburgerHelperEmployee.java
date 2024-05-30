@@ -7,6 +7,8 @@ import java.awt.*;
 import java.util.Arrays;
 
 public class HamburgerHelperEmployee extends JPanel { // class start
+    private static String name = null;
+
     private static JPanel addOrder() {
         var form = new MultiForm(s -> {
             HamburgerHelperMain.orders.addRow(s);
@@ -26,21 +28,15 @@ public class HamburgerHelperEmployee extends JPanel { // class start
 
     private static JPanel askVacant() {
         var form = new MultiForm(s -> {
-            var row = HamburgerHelperMain.employees.getRow(s[0]);
+            var row = HamburgerHelperMain.employees.getRow(name);
 
-            if (row == null) {
-                PaneWrapper.err("No employee named " + s[0]);
-                return;
-            }
+            var hours = s[0];
+            var cause = s[1];
+            var role = row.getString("Job");
 
-            var strings = new String[s.length + 1];
-            System.arraycopy(s, 0, strings, 0, s.length);
-            strings[s.length] = row.getString("Job");
-            HamburgerHelperMain.vacancy.addRow(strings);
-            PaneWrapper.say(Arrays.toString(s));
+            HamburgerHelperMain.vacancy.addRow(hours, cause, role);
         });
 
-        form.addInput("Employee's Name: ", PaneWrapper.makeStringField(""));
         form.addInput("Requested Hours: ", PaneWrapper.makeIntField(0));
         form.addInput("Cause of the Request: ", PaneWrapper.makeStringField(""));
 
@@ -64,7 +60,10 @@ public class HamburgerHelperEmployee extends JPanel { // class start
         var loginManager = new LoginManager(
                 HamburgerHelperMain.employees,
                 row -> true,
-                name -> cardLayout.show(this, "MainApp")
+                nameLogin -> {
+                    name = nameLogin;
+                    cardLayout.show(this, "MainApp");
+                }
         );
 
         this.add(loginManager, "Login");
