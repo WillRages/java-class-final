@@ -1,5 +1,7 @@
 package database;
 
+import ui.PaneWrapper;
+
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
@@ -92,14 +94,7 @@ public class Database {
     }
 
     private static String joinRow(ArrayList<String> row) {
-        StringBuilder builder = new StringBuilder(row.size());
-
-        for (int i = 0; i < row.size(); ++i) {
-            builder.append(row.get(i));
-            if (i != row.size() - 1) builder.append(';');
-        }
-
-        return builder.toString();
+        return String.join(";", row);
     }
 
     public void writeToFile() {
