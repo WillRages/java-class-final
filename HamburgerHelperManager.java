@@ -6,6 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class HamburgerHelperManager extends JPanel {
+    private final Runnable logout;
+
     private static JPanel addEmployeeMenu() {
         var form = new MultiForm(HamburgerHelperMain.employees::addRow);
 
@@ -97,6 +99,10 @@ public class HamburgerHelperManager extends JPanel {
         return panel;
     }
 
+    public void logout() {
+        logout.run();
+    }
+
     public HamburgerHelperManager() {
         var cardLayout = new CardLayout();
         this.setLayout(cardLayout);
@@ -126,6 +132,11 @@ public class HamburgerHelperManager extends JPanel {
                 },
                 name -> cardLayout.show(this, "MainApp")
         );
+
+        logout = () -> {
+            cardLayout.show(this, "Login");
+            login.clear();
+        };
 
         this.add(login, "Login");
         this.add(pane, "MainApp");

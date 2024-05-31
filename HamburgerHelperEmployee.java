@@ -8,6 +8,7 @@ import java.util.Arrays;
 
 public class HamburgerHelperEmployee extends JPanel { // class start
     private static String name = null;
+    private final Runnable logout;
 
     private static JPanel addOrder() {
         var form = new MultiForm(s -> {
@@ -45,6 +46,10 @@ public class HamburgerHelperEmployee extends JPanel { // class start
         return form;
     }
 
+    public void logout() {
+        logout.run();
+    }
+
     public HamburgerHelperEmployee() {
         var cardLayout = new CardLayout();
         this.setLayout(cardLayout);
@@ -65,6 +70,11 @@ public class HamburgerHelperEmployee extends JPanel { // class start
                     cardLayout.show(this, "MainApp");
                 }
         );
+
+        logout = () -> {
+            cardLayout.show(this, "Login");
+            loginManager.clear();
+        };
 
         this.add(loginManager, "Login");
         this.add(pane, "MainApp");

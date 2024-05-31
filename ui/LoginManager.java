@@ -9,12 +9,23 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 public class LoginManager extends JPanel {
+    private final Runnable clear;
+
+    public void clear() {
+        clear.run();
+    }
+
     public LoginManager(Database database, Function<Row, Boolean> validator, Consumer<String> onSubmit) {
         JLabel usernameLabel = new JLabel("Username: ");
         JLabel passkeyLabel = new JLabel("Password: ");
 
         JTextField usernameInput = PaneWrapper.makeStringField("");
         JTextField passkeyInput = PaneWrapper.makeStringField("");
+
+        clear = () -> {
+            usernameInput.setText("");
+            passkeyInput.setText("");
+        };
 
         JButton submit = PaneWrapper.makeButton("Submit", e -> {
             var username = usernameInput.getText();

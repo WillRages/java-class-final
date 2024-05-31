@@ -34,8 +34,11 @@ public class HamburgerHelperMain {
         panel.add(employee, "Employee");
         panel.add(customer, "Customer");
 
-        var multibox = PaneWrapper.makeDropdown(s -> cardLayout.show(panel, s),
-                "Manager", "Employee", "Customer");
+        var multibox = PaneWrapper.makeDropdown(s -> {
+            cardLayout.show(panel, s);
+            employee.logout();
+            manager.logout();
+        }, "Manager", "Employee", "Customer");
 
         var content = frame.getContentPane();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
