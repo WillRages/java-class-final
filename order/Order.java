@@ -2,15 +2,13 @@ package order;
 
 import order.Ingredient.Type;
 
-import javax.swing.*;
-import javax.swing.event.ListDataListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import static order.Order.MenuItems.*;
+import static order.Order.MenuItem.*;
 
 public class Order {
-    public enum MenuItems {
+    public enum MenuItem {
         Burger(List.of(
                 new Ingredient(0.25, Type.BeefLbs),
                 new Ingredient(2, Type.Buns),
@@ -204,7 +202,7 @@ public class Order {
         private final List<Ingredient> ingredients;
         private final double price;
 
-        MenuItems(List<Ingredient> ingredients, double price) {
+        MenuItem(List<Ingredient> ingredients, double price) {
             this.ingredients = ingredients;
             this.price = price;
         }
@@ -219,7 +217,7 @@ public class Order {
     }
 
     // burgers fries sandwiches drinks additions
-    public static MenuItems[] burgers = new MenuItems[]{
+    public static MenuItem[] burgers = new MenuItem[]{
             Burger,
             Cheeseburger,
             SupersizeBurger,
@@ -233,7 +231,7 @@ public class Order {
             THE_CHUCK_NORRIS_BURGER,
     };
 
-    public static MenuItems[] fries = new MenuItems[]{
+    public static MenuItem[] fries = new MenuItem[]{
             Fry,
             SmallFries,
             MediumFries,
@@ -242,7 +240,7 @@ public class Order {
             SupersizeFries,
     };
 
-    public static MenuItems[] sandwiches = new MenuItems[]{
+    public static MenuItem[] sandwiches = new MenuItem[]{
             ChickenSandwich,
             ChickenCheeseSandwich,
             DoubleChickenSandwich,
@@ -251,7 +249,7 @@ public class Order {
             QuintupleChickenCheeseSandwich,
     };
 
-    public static MenuItems[] drinks = new MenuItems[]{
+    public static MenuItem[] drinks = new MenuItem[]{
             SmallDrink,
             MediumDrink,
             LargeDrink,
@@ -259,7 +257,7 @@ public class Order {
             THE_CHONKER_DRINK,
     };
 
-    public static MenuItems[] additions = new MenuItems[]{
+    public static MenuItem[] additions = new MenuItem[]{
             Onion,
             Pickle,
             Tomato,
@@ -279,26 +277,5 @@ public class Order {
             Mayo,
     };
 
-    public final ArrayList<MenuItems> items = new ArrayList<>();
-    public final Model model = new Model();
-
-    public class Model implements ListModel<JPanel> {
-        @Override
-        public int getSize() {
-            return Order.this.items.size();
-        }
-
-        @Override
-        public JPanel getElementAt(int index) {
-            return null;
-        }
-
-        @Override
-        public void addListDataListener(ListDataListener l) {
-        }
-
-        @Override
-        public void removeListDataListener(ListDataListener l) {
-        }
-    }
+    public final ArrayList<MenuItem> items = new ArrayList<>();
 }

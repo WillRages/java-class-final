@@ -1,4 +1,6 @@
 import database.Database;
+import order.Order;
+import ui.DisplayMenuItem;
 import ui.MultiForm;
 import ui.PaneWrapper;
 
@@ -25,12 +27,19 @@ public class HamburgerHelperCustomer extends JPanel {
 
     public HamburgerHelperCustomer() {
         var cardLayout = new CardLayout();
-        this.setLayout(cardLayout);
+//        this.setLayout(cardLayout);
 
         var pane = new JTabbedPane();
         pane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
         pane.addTab("Order: ", HamburgerHelperMain.pinTop(makeOrder()));
 
-        this.add(pane, "Customer Page");
+//        this.add(pane, "Customer Page");
+
+        var menuItem = new DisplayMenuItem(
+                Order.MenuItem.ChickenCheeseSandwich,
+                () -> PaneWrapper.say("Purchased Chicken Cheese Sandwich")
+        );
+
+        this.add(menuItem);
     }
 }
