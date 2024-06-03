@@ -52,7 +52,7 @@ public class HamburgerHelperMain {
 
         frame.addWindowListener(new WindowAdapter() {
             @Override
-            public void windowClosed(WindowEvent e) {
+            public void windowClosing(WindowEvent e) {
                 employees.writeToFile();
                 inventory.writeToFile();
                 orders.writeToFile();
