@@ -45,7 +45,7 @@ public class Database {
                     throw new Exception(String.format("Wrong column size %d, expected %d", cols.size(),
                             headers.size()));
                 }
-                this.rows.put(cols.getFirst(), cols);
+                this.rows.put(cols.get(0), cols);
             }
         } catch (Exception e) {
             System.err.println(e + "\nAt line " + line);
