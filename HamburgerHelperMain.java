@@ -32,15 +32,15 @@ public class HamburgerHelperMain {
 
         customer.setPreferredSize(customer.getMaximumSize());
 
-        panel.add(manager, "Manager");
-        panel.add(employee, "Employee");
         panel.add(customer, "Customer");
+        panel.add(employee, "Employee");
+        panel.add(manager, "Manager");
 
         var multibox = PaneWrapper.makeDropdown(s -> {
             cardLayout.show(panel, s);
             employee.logout();
             manager.logout();
-        }, "Manager", "Employee", "Customer");
+        }, "Customer", "Employee", "Manager");
 
         var content = frame.getContentPane();
         content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
