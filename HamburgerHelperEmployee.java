@@ -4,30 +4,54 @@ import ui.PaneWrapper;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
-import java.util.Arrays;
-import java.time.format.DateTimeFormatter;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class HamburgerHelperEmployee extends JPanel { // class start
     private static String name = null;
     private final Runnable logout;
 
-    private static JPanel addOrder() {
-        var form = new MultiForm(s -> {
-            HamburgerHelperMain.orders.addRow(s);
-            PaneWrapper.say(Arrays.toString(s));
+    private static JPanel getOrderMenu() {
+        var panel = new JPanel(new GridBagLayout());
+
+        var dataView = PaneWrapper.getFromDatabase(HamburgerHelperMain.orders);
+
+        var nameLabel = new JLabel("Name:");
+        var nameField = PaneWrapper.makeStringField("");
+
+        var handle = PaneWrapper.makeButton("Handle Order", e -> {
+            var name = nameField.getText();
+            nameField.setText("");
+            var order = HamburgerHelperMain.orders.getRow(name);
+
+            if (order == null) {
+                PaneWrapper.err("No order for name " + name);
+                return;
+            }
+
+            HamburgerHelperMain.orders.deleteRow(name);
+
+            PaneWrapper.say("Handled order for " + name);
         });
 
-        form.addInput("Main Dish: ", PaneWrapper.makeStringField(""));
-        form.addInput("Side Dish: ", PaneWrapper.makeStringField(""));
-        form.addInput("Drink: ", PaneWrapper.makeStringField(""));
-        form.addInput("Address: ", PaneWrapper.makeStringField(""));
-        form.addInput("Price: ", PaneWrapper.makeIntField(0));
+        var c = new GridBagConstraints();
 
-        form.addButtons();
+        c.gridheight = 4;
+        c.fill = GridBagConstraints.HORIZONTAL;
+        c.gridx = 0;
+        c.gridy = 0;
+        panel.add(dataView, c);
 
-        return form;
+        c.gridheight = 1;
+
+        c.gridx = 1;
+        panel.add(nameLabel, c);
+        c.gridy = 1;
+        panel.add(nameField, c);
+        c.gridy = 2;
+        panel.add(handle, c);
+
+        return panel;
     }
 
     private static JPanel askVacant() {
@@ -54,19 +78,16 @@ public class HamburgerHelperEmployee extends JPanel { // class start
         var checkIn = new JButton("Check in");
         var checkOut = new JButton("Check out");
 
-        checkIn.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                var dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
-                var now = LocalDateTime.now();
-                String time = dtf.format(now);
-            }
+        checkIn.addActionListener(e -> {
+            var dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+            var now = LocalDateTime.now();
+            String time = dtf.format(now);
         });
-        checkOut.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                var dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
-                var now = LocalDateTime.now();
-                String time = dtf.format(now);
-            }
+
+        checkOut.addActionListener(e -> {
+            var dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
+            var now = LocalDateTime.now();
+            String time = dtf.format(now);
         });
         panel.add(checkIn);
         panel.add(checkOut);
@@ -85,8 +106,7 @@ public class HamburgerHelperEmployee extends JPanel { // class start
         var pane = new JTabbedPane();
         pane.addTab("Check In/Check Out", HamburgerHelperMain.pinTop(checkInandCheckOut()));
         pane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
-        pane.addTab("Add Orders", HamburgerHelperMain.pinTop(addOrder()));
-        pane.addTab("View Orders", PaneWrapper.getFromDatabase(HamburgerHelperMain.orders));
+        pane.addTab("Handle Orders", getOrderMenu());
         pane.addTab("View Employees", PaneWrapper.getFromDatabase(HamburgerHelperMain.employees));
         pane.addTab("View Inventory", PaneWrapper.getFromDatabase(HamburgerHelperMain.inventory));
         pane.addTab("Ask Vacant Hours", HamburgerHelperMain.pinTop(askVacant()));

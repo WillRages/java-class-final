@@ -69,7 +69,7 @@ public class Database {
 
     public void addRow(String... data) {
         if (data.length != this.headers.size()) {
-            return;
+            throw new RuntimeException("Wrong data length (Expected %d, got %d)".formatted(this.headers.size(), data.length));
         }
 
         this.rows.put(data[0], new ArrayList<>(List.of(data)));

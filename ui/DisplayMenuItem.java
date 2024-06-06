@@ -20,6 +20,8 @@ public class DisplayMenuItem extends JPanel {
         var price = item.getPrice();
         var priceLabel = new JLabel("" + price);
 
+        var nameLabel = new JLabel(item.name());
+
         this.setLayout(new GridBagLayout());
 
         this.purchaseButton = PaneWrapper.makeButton("Purchase", e -> onBuy.run());
@@ -30,13 +32,17 @@ public class DisplayMenuItem extends JPanel {
 
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridy = 0;
-        this.add(ingredients, c);
-        c.gridy = 1;
-        this.add(priceLabel, c);
         c.ipadx = 10;
         c.ipady = 10;
+        this.add(nameLabel, c);
         c.gridy = 2;
+        this.add(priceLabel, c);
+        c.gridy = 3;
         this.add(purchaseButton, c);
+        c.ipadx = 0;
+        c.ipady = 0;
+        c.gridy = 1;
+        this.add(ingredients, c);
 
         this.setBorder(BorderFactory.createLineBorder(new Color(0, 0, 0), 3));
     }

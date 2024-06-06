@@ -2,7 +2,6 @@ package order;
 
 import order.Ingredient.Type;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static order.Order.MenuItem.*;
@@ -276,6 +275,4 @@ public class Order {
             Parmesan,
             Mayo,
     };
-
-    public final ArrayList<MenuItem> items = new ArrayList<>();
 }

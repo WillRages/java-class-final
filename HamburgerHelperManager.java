@@ -9,12 +9,14 @@ public class HamburgerHelperManager extends JPanel {
     private final Runnable logout;
 
     private static JPanel addEmployeeMenu() {
-        var form = new MultiForm(HamburgerHelperMain.employees::addRow);
+        var form = new MultiForm(data -> HamburgerHelperMain.employees.addRow(data));
 
         form.addInput("Name: ", PaneWrapper.makeStringField(""));
         form.addInput("Role: ", PaneWrapper.makeStringField(""));
         form.addInput("Wage: ", PaneWrapper.makeIntField(0));
         form.addInput("Passkey: ", PaneWrapper.makeStringField(""));
+        form.addInput("Vacancy: ", PaneWrapper.makeIntField(0));
+        form.addInput("Hours: ", PaneWrapper.makeIntField(0));
 
         form.addButtons();
 
@@ -60,8 +62,12 @@ public class HamburgerHelperManager extends JPanel {
             vacancy += request.getDouble("Hours");
 
             HamburgerHelperMain.employees.addRow(
-                    employee.getString("Name"), employee.getString("Job"), employee.getString("Wage"),
-                    employee.getString("Passkey"), "" + vacancy
+                    employee.getString("Name"),
+                    employee.getString("Job"),
+                    employee.getString("Wage"),
+                    employee.getString("Passkey"),
+                    "" + vacancy,
+                    employee.getString("Hours")
             );
 
             HamburgerHelperMain.vacancy.deleteRow(nameField.getText());

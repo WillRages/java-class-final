@@ -12,7 +12,7 @@ public class HamburgerHelperMain {
     public static Database orders = new Database("assets/orders.csv");
     public static Database vacancy = new Database("assets/vacantRequest.csv");
 
-    public static JPanel pinTop(JPanel panel) {
+    public static JPanel pinTop(JComponent panel) {
         var wrapper = new JPanel(new BorderLayout());
         wrapper.add(panel, BorderLayout.NORTH);
         return wrapper;
@@ -30,6 +30,8 @@ public class HamburgerHelperMain {
         var employee = new HamburgerHelperEmployee();
         var customer = new HamburgerHelperCustomer();
 
+        customer.setPreferredSize(customer.getMaximumSize());
+
         panel.add(manager, "Manager");
         panel.add(employee, "Employee");
         panel.add(customer, "Customer");
@@ -45,6 +47,7 @@ public class HamburgerHelperMain {
 
         content.add(multibox);
         content.add(panel);
+        content.setPreferredSize(new Dimension(640, 480));
 
         frame.pack();
         frame.setPreferredSize(new Dimension(640, 480));

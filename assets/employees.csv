@@ -1,4 +1,4 @@
-Name;Job;Wage;Passkey;Vacancy
-Joe;Manager;30;b;0
-Arthur;Fry Cook;20;b;100.0
-Tristan;Cashier;20;b;40.0
+Name;Job;Wage;Passkey;Vacancy;Hours
+Joe;Manager;30;b;0;0
+Arthur;Fry Cook;20;b;100.0;0
+Tristan;Cashier;20;b;40.0;0
