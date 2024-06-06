@@ -61,6 +61,8 @@ public class HamburgerHelperManager extends JPanel {
             var vacancy = employee.getDouble("Vacancy");
             vacancy += request.getDouble("Hours");
 
+            HamburgerHelperMain.employees.deleteRow(employee.getString("Name"));
+
             HamburgerHelperMain.employees.addRow(
                     employee.getString("Name"),
                     employee.getString("Job"),

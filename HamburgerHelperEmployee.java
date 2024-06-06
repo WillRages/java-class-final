@@ -5,11 +5,12 @@ import ui.PaneWrapper;
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 
 public class HamburgerHelperEmployee extends JPanel { // class start
     private static String name = null;
     private final Runnable logout;
+    private static LocalDateTime start = null;
 
     private static JPanel getOrderMenu() {
         var panel = new JPanel(new GridBagLayout());
@@ -78,16 +79,30 @@ public class HamburgerHelperEmployee extends JPanel { // class start
         var checkIn = new JButton("Check in");
         var checkOut = new JButton("Check out");
 
-        checkIn.addActionListener(e -> {
-            var dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
-            var now = LocalDateTime.now();
-            String time = dtf.format(now);
-        });
+        checkIn.addActionListener(e -> start = LocalDateTime.now());
 
         checkOut.addActionListener(e -> {
-            var dtf = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
-            var now = LocalDateTime.now();
-            String time = dtf.format(now);
+            if (start == null) {
+                PaneWrapper.err("Can't check out because not currently checked in.");
+            } else {
+                var row = HamburgerHelperMain.employees.getRow(name);
+                var workedHours = row.getDouble("Hours");
+
+                var elapsedHours = ChronoUnit.SECONDS.between(start, LocalDateTime.now()) / 3600.0;
+                start = null;
+
+                workedHours += elapsedHours;
+
+                HamburgerHelperMain.employees.deleteRow(name);
+                HamburgerHelperMain.employees.addRow(
+                        row.getString("Name"),
+                        row.getString("Job"),
+                        row.getString("Wage"),
+                        row.getString("Passkey"),
+                        row.getString("Vacancy"),
+                        "" + workedHours
+                );
+            }
         });
         panel.add(checkIn);
         panel.add(checkOut);
@@ -97,6 +112,7 @@ public class HamburgerHelperEmployee extends JPanel { // class start
 
     public void logout() {
         logout.run();
+        start = null;
     }
 
     public HamburgerHelperEmployee() {
